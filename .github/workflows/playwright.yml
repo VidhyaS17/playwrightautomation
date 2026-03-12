@@ -11,27 +11,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-        playwright install
-        playwright install-deps
+      - name: Install Playwright browsers and system deps
+        run: |
+          playwright install chromium
+          playwright install-deps chromium
 
-    - name: Run Playwright Tests
-      run: |
-        pytest -v
+      - name: Run Playwright Tests
+        run: pytest -v
 
-    - name: Upload Allure Results
-      uses: actions/upload-artifact@v4
-      with:
-        name: allure-results
-        path: allure-results
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
