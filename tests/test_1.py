@@ -1,11 +1,12 @@
 import pytest
-from playwright.sync_api import sync_playwright, expect
 import allure
+from playwright.sync_api import sync_playwright, expect
+
 
 @allure.title("Forgot Password - Invalid Username")
 def test_forgotpassword_invalid_username():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
 
         page.goto("https://canvas-preuat.muzaini.com/login")
